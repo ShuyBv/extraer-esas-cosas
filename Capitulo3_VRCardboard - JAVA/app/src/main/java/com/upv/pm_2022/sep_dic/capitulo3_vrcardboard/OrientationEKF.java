@@ -1,11 +1,6 @@
 package com.upv.pm_2022.sep_dic.capitulo3_vrcardboard;
 
 public class OrientationEKF {
-    private static final String TAG = "OrientationEKF";
-
-    private static final float NS2S = 1.0E-9f;
-    private static final double MIN_ACCEL_NOISE_SIGMA = 0.75;
-    private static final double MAX_ACCEL_NOISE_SIGMA = 7.0;
     private double[] rotationMatrix;
     private Matrix3x3d so3SensorFromWorld;
     private Matrix3x3d so3LastMotion;
@@ -121,13 +116,10 @@ public class OrientationEKF {
         this.sensorTimeStampGyro = 0L;
         this.so3SensorFromWorld.setIdentity();
         this.so3LastMotion.setIdentity();
-        final double initialSigmaP = 5.0;
         this.mP.setZero();
         this.mP.setSameDiagonal(25.0);
-        final double initialSigmaQ = 1.0;
         this.mQ.setZero();
         this.mQ.setSameDiagonal(1.0);
-        final double initialSigmaR = 0.25;
         this.mR.setZero();
         this.mR.setSameDiagonal(0.0625);
         this.mRaccel.setZero();
@@ -145,42 +137,7 @@ public class OrientationEKF {
         this.alignedToGravity = false;
         this.alignedToNorth = false;
     }
-    
-    public boolean isReady() {
-        return this.alignedToGravity;
-    }
-    
-    public double getHeadingDegrees() {
-        final double x = this.so3SensorFromWorld.get(2, 0);
-        final double y = this.so3SensorFromWorld.get(2, 1);
-        final double mag = Math.sqrt(x * x + y * y);
-        if (mag < 0.1) {
-            return 0.0;
-        }
-        double heading = -90.0 - Math.atan2(y, x) / 3.141592653589793 * 180.0;
-        if (heading < 0.0) {
-            heading += 360.0;
-        }
-        if (heading >= 360.0) {
-            heading -= 360.0;
-        }
-        return heading;
-    }
-    
-    public synchronized void setHeadingDegrees(final double heading) {
-        final double currentHeading = this.getHeadingDegrees();
-        final double deltaHeading = heading - currentHeading;
-        final double s = Math.sin(deltaHeading / 180.0 * 3.141592653589793);
-        final double c = Math.cos(deltaHeading / 180.0 * 3.141592653589793);
-        final double[][] deltaHeadingRotationVals = { { c, -s, 0.0 }, { s, c, 0.0 }, { 0.0, 0.0, 1.0 } };
-        arrayAssign(deltaHeadingRotationVals, this.setHeadingDegreesTempM1);
-        Matrix3x3d.mult(this.so3SensorFromWorld, this.setHeadingDegreesTempM1, this.so3SensorFromWorld);
-    }
-    
-    public double[] getGLMatrix() {
-        return this.glMatrixFromSo3(this.so3SensorFromWorld);
-    }
-    
+
     public double[] getPredictedGLMatrix(final double secondsAfterLastGyroEvent) {
         final Vector3d pmu = this.getPredictedGLMatrixTempV1;
         pmu.set(this.lastGyro);
@@ -191,27 +148,7 @@ public class OrientationEKF {
         Matrix3x3d.mult(so3PredictedMotion, this.so3SensorFromWorld, so3PredictedState);
         return this.glMatrixFromSo3(so3PredictedState);
     }
-    
-    public Matrix3x3d getRotationMatrix() {
-        return this.so3SensorFromWorld;
-    }
-    
-    public static void arrayAssign(final double[][] data, final Matrix3x3d m) {
-        assert 3 == data.length;
-        assert 3 == data[0].length;
-        assert 3 == data[1].length;
-        assert 3 == data[2].length;
-        m.set(data[0][0], data[0][1], data[0][2], data[1][0], data[1][1], data[1][2], data[2][0], data[2][1], data[2][2]);
-    }
-    
-    public boolean isAlignedToGravity() {
-        return this.alignedToGravity;
-    }
-    
-    public boolean isAlignedToNorth() {
-        return this.alignedToNorth;
-    }
-    
+
     public synchronized void processGyro(final Vector3d gyro, final long sensorTimeStamp) {
         final float kTimeThreshold = 0.04f;
         final float kdTDefault = 0.01f;
@@ -292,66 +229,7 @@ public class OrientationEKF {
             this.alignedToGravity = true;
         }
     }
-    
-    public synchronized void processMag(final float[] mag, final long sensorTimeStamp) {
-        if (!this.alignedToGravity) {
-            return;
-        }
-        this.mz.set(mag[0], mag[1], mag[2]);
-        this.mz.normalize();
-        final Vector3d downInSensorFrame = new Vector3d();
-        this.so3SensorFromWorld.getColumn(2, downInSensorFrame);
-        Vector3d.cross(this.mz, downInSensorFrame, this.processMagTempV1);
-        final Vector3d perpToDownAndMag = this.processMagTempV1;
-        perpToDownAndMag.normalize();
-        Vector3d.cross(downInSensorFrame, perpToDownAndMag, this.processMagTempV2);
-        final Vector3d magHorizontal = this.processMagTempV2;
-        magHorizontal.normalize();
-        this.mz.set(magHorizontal);
-        if (this.alignedToNorth) {
-            this.magObservationFunctionForNumericalJacobian(this.so3SensorFromWorld, this.mNu);
-            final double eps = 1.0E-7;
-            for (int dof = 0; dof < 3; ++dof) {
-                final Vector3d delta = this.processMagTempV3;
-                delta.setZero();
-                delta.setComponent(dof, eps);
-                So3Util.sO3FromMu(delta, this.processMagTempM1);
-                Matrix3x3d.mult(this.processMagTempM1, this.so3SensorFromWorld, this.processMagTempM2);
-                this.magObservationFunctionForNumericalJacobian(this.processMagTempM2, this.processMagTempV4);
-                final Vector3d withDelta = this.processMagTempV4;
-                Vector3d.sub(this.mNu, withDelta, this.processMagTempV5);
-                this.processMagTempV5.scale(1.0 / eps);
-                this.mH.setColumn(dof, this.processMagTempV5);
-            }
-            this.mH.transpose(this.processMagTempM4);
-            Matrix3x3d.mult(this.mP, this.processMagTempM4, this.processMagTempM5);
-            Matrix3x3d.mult(this.mH, this.processMagTempM5, this.processMagTempM6);
-            Matrix3x3d.add(this.processMagTempM6, this.mR, this.mS);
-            this.mS.invert(this.processMagTempM4);
-            this.mH.transpose(this.processMagTempM5);
-            Matrix3x3d.mult(this.processMagTempM5, this.processMagTempM4, this.processMagTempM6);
-            Matrix3x3d.mult(this.mP, this.processMagTempM6, this.mK);
-            Matrix3x3d.mult(this.mK, this.mNu, this.mx);
-            Matrix3x3d.mult(this.mK, this.mH, this.processMagTempM4);
-            this.processMagTempM5.setIdentity();
-            this.processMagTempM5.minusEquals(this.processMagTempM4);
-            Matrix3x3d.mult(this.processMagTempM5, this.mP, this.processMagTempM4);
-            this.mP.set(this.processMagTempM4);
-            So3Util.sO3FromMu(this.mx, this.so3LastMotion);
-            Matrix3x3d.mult(this.so3LastMotion, this.so3SensorFromWorld, this.processMagTempM4);
-            this.so3SensorFromWorld.set(this.processMagTempM4);
-            this.updateCovariancesAfterMotion();
-        }
-        else {
-            this.magObservationFunctionForNumericalJacobian(this.so3SensorFromWorld, this.mNu);
-            So3Util.sO3FromMu(this.mNu, this.so3LastMotion);
-            Matrix3x3d.mult(this.so3LastMotion, this.so3SensorFromWorld, this.processMagTempM4);
-            this.so3SensorFromWorld.set(this.processMagTempM4);
-            this.updateCovariancesAfterMotion();
-            this.alignedToNorth = true;
-        }
-    }
-    
+
     private double[] glMatrixFromSo3(final Matrix3x3d so3) {
         for (int r = 0; r < 3; ++r) {
             for (int c = 0; c < 3; ++c) {
@@ -397,11 +275,5 @@ public class OrientationEKF {
         Matrix3x3d.mult(so3SensorFromWorldPred, this.down, this.mh);
         So3Util.sO3FromTwoVec(this.mh, this.mz, this.accObservationFunctionForNumericalJacobianTempM);
         So3Util.muFromSO3(this.accObservationFunctionForNumericalJacobianTempM, result);
-    }
-    
-    private void magObservationFunctionForNumericalJacobian(final Matrix3x3d so3SensorFromWorldPred, final Vector3d result) {
-        Matrix3x3d.mult(so3SensorFromWorldPred, this.north, this.mh);
-        So3Util.sO3FromTwoVec(this.mh, this.mz, this.magObservationFunctionForNumericalJacobianTempM);
-        So3Util.muFromSO3(this.magObservationFunctionForNumericalJacobianTempM, result);
     }
 }

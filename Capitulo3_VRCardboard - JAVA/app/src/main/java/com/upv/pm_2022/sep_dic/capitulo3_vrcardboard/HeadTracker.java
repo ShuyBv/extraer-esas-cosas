@@ -29,8 +29,8 @@ public class HeadTracker implements SensorEventListener {
     private final Vector3d mLatestAcc;
     
     public static HeadTracker createFromContext(final Context context) {
-        final SensorManager sensorManager = (SensorManager)context.getSystemService("sensor");
-        final Display display = ((WindowManager)context.getSystemService("window")).getDefaultDisplay();
+        final SensorManager sensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
+        final Display display = ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         return new HeadTracker(new DeviceSensorLooper(sensorManager), new SystemClock(), display);
     }
     
@@ -100,11 +100,7 @@ public class HeadTracker implements SensorEventListener {
         }
         this.mGyroBias.set(gyroBias[0], gyroBias[1], gyroBias[2]);
     }
-    
-    public void setNeckModelEnabled(final boolean enabled) {
-        this.mNeckModelEnabled = enabled;
-    }
-    
+
     public void getLastHeadView(final float[] headView, final int offset) {
         if (offset + 16 > headView.length) {
             throw new IllegalArgumentException("Not enough space to write the result");

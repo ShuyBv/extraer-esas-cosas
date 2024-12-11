@@ -9,11 +9,6 @@ public class Vector3d {
         super();
     }
     
-    public Vector3d(final double xx, final double yy, final double zz) {
-        super();
-        this.set(xx, yy, zz);
-    }
-    
     public void set(final double xx, final double yy, final double zz) {
         this.x = xx;
         this.y = yy;
@@ -65,11 +60,6 @@ public class Vector3d {
     public double length() {
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
-    
-    public boolean sameValues(final Vector3d other) {
-        return this.x == other.x && this.y == other.y && this.z == other.z;
-    }
-    
     public static void add(final Vector3d a, final Vector3d b, final Vector3d result) {
         result.set(a.x + b.x, a.y + b.y, a.z + b.z);
     }

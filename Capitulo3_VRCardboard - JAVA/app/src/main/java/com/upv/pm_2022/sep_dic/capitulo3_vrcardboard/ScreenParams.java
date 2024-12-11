@@ -1,5 +1,6 @@
 package com.upv.pm_2022.sep_dic.capitulo3_vrcardboard;
 
+import android.os.Build;
 import android.view.*;
 import android.util.*;
 //import com.google.vrtoolkit.cardboard.proto.*;
@@ -18,7 +19,9 @@ public class ScreenParams {
         super();
         final DisplayMetrics metrics = new DisplayMetrics();
         try {
-            display.getRealMetrics(metrics);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                display.getRealMetrics(metrics);
+            }
         }
         catch (NoSuchMethodError e) {
             display.getMetrics(metrics);
@@ -37,7 +40,7 @@ public class ScreenParams {
             this.mYMetersPerPixel = tempMetersPerPixel;
         }
     }
-    
+
     public static ScreenParams fromProto(final Display display, final Phone.PhoneParams params) {
         if (params == null) {
             return null;
@@ -64,16 +67,8 @@ public class ScreenParams {
         this.mBorderSizeMeters = params.mBorderSizeMeters;
     }
     
-    public void setWidth(final int width) {
-        this.mWidth = width;
-    }
-    
     public int getWidth() {
         return this.mWidth;
-    }
-    
-    public void setHeight(final int height) {
-        this.mHeight = height;
     }
     
     public int getHeight() {
@@ -86,10 +81,6 @@ public class ScreenParams {
     
     public float getHeightMeters() {
         return this.mHeight * this.mYMetersPerPixel;
-    }
-    
-    public void setBorderSizeMeters(final float screenBorderSize) {
-        this.mBorderSizeMeters = screenBorderSize;
     }
     
     public float getBorderSizeMeters() {

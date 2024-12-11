@@ -113,15 +113,6 @@ public class MagnetSensor {
             mSensorTimes = new ArrayList<>();
         }
         
-        public ThresholdTriggerDetector(final Context context, final int t1, final int t2) {
-            super(context);
-            mLastFiring = 0L;
-            mSensorData = new ArrayList<>();
-            mSensorTimes = new ArrayList<>();
-            ThresholdTriggerDetector.mT1 = t1;
-            ThresholdTriggerDetector.mT2 = t2;
-        }
-        
         private void addData(final float[] values, final long time) {
             mSensorData.add(values);
             mSensorTimes.add(time);
@@ -206,7 +197,6 @@ public class MagnetSensor {
     }
     
     private static class VectorTriggerDetector extends TriggerDetector {
-        private static final String TAG = "ThresholdTriggerDetector";
         private static final long NS_REFRESH_TIME = 350000000L;
         private static final long NS_THROWAWAY_SIZE = 500000000L;
         private static final long NS_WAIT_SIZE = 100000000L;
@@ -226,18 +216,7 @@ public class MagnetSensor {
             VectorTriggerDetector.mYThreshold = 15;
             VectorTriggerDetector.mZThreshold = 6;
         }
-        
-        public VectorTriggerDetector(final Context context, final int xThreshold,
-                                     final int yThreshold, final int zThreshold) {
-            super(context);
-            mLastFiring = 0L;
-            mSensorData = new ArrayList<>();
-            mSensorTimes = new ArrayList<>();
-            VectorTriggerDetector.mXThreshold = xThreshold;
-            VectorTriggerDetector.mYThreshold = yThreshold;
-            VectorTriggerDetector.mZThreshold = zThreshold;
-        }
-        
+
         private void addData(final float[] values, final long time) {
             mSensorData.add(values);
             mSensorTimes.add(time);

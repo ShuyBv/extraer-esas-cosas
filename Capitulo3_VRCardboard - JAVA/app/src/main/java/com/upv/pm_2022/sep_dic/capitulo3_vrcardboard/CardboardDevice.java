@@ -4,7 +4,7 @@ import java.io.*;
 import com.google.protobuf.nano.*;
 
 public interface CardboardDevice {
-    public static final class DeviceParams extends MessageNano {
+    public final class DeviceParams extends MessageNano {
         private static volatile DeviceParams[] _emptyArray;
         private int bitField0_;
         private String vendor_;
@@ -40,16 +40,6 @@ public interface CardboardDevice {
             return this;
         }
         
-        public boolean hasVendor() {
-            return (this.bitField0_ & 0x1) != 0x0;
-        }
-        
-        public DeviceParams clearVendor() {
-            this.vendor_ = "";
-            this.bitField0_ &= 0xFFFFFFFE;
-            return this;
-        }
-        
         public String getModel() {
             return this.model_;
         }
@@ -62,11 +52,7 @@ public interface CardboardDevice {
             this.bitField0_ |= 0x2;
             return this;
         }
-        
-        public boolean hasModel() {
-            return (this.bitField0_ & 0x2) != 0x0;
-        }
-        
+
         public DeviceParams clearModel() {
             this.model_ = "";
             this.bitField0_ &= 0xFFFFFFFD;
@@ -83,16 +69,6 @@ public interface CardboardDevice {
             return this;
         }
         
-        public boolean hasScreenToLensDistance() {
-            return (this.bitField0_ & 0x4) != 0x0;
-        }
-        
-        public DeviceParams clearScreenToLensDistance() {
-            this.screenToLensDistance_ = 0.0f;
-            this.bitField0_ &= 0xFFFFFFFB;
-            return this;
-        }
-        
         public float getInterLensDistance() {
             return this.interLensDistance_;
         }
@@ -102,17 +78,6 @@ public interface CardboardDevice {
             this.bitField0_ |= 0x8;
             return this;
         }
-        
-        public boolean hasInterLensDistance() {
-            return (this.bitField0_ & 0x8) != 0x0;
-        }
-        
-        public DeviceParams clearInterLensDistance() {
-            this.interLensDistance_ = 0.0f;
-            this.bitField0_ &= 0xFFFFFFF7;
-            return this;
-        }
-        
         public float getTrayBottomToLensHeight() {
             return this.trayBottomToLensHeight_;
         }
@@ -123,16 +88,6 @@ public interface CardboardDevice {
             return this;
         }
         
-        public boolean hasTrayBottomToLensHeight() {
-            return (this.bitField0_ & 0x10) != 0x0;
-        }
-        
-        public DeviceParams clearTrayBottomToLensHeight() {
-            this.trayBottomToLensHeight_ = 0.0f;
-            this.bitField0_ &= 0xFFFFFFEF;
-            return this;
-        }
-        
         public boolean getHasMagnet() {
             return this.hasMagnet_;
         }
@@ -140,16 +95,6 @@ public interface CardboardDevice {
         public DeviceParams setHasMagnet(boolean value) {
             this.hasMagnet_ = value;
             this.bitField0_ |= 0x20;
-            return this;
-        }
-        
-        public boolean hasHasMagnet() {
-            return (this.bitField0_ & 0x20) != 0x0;
-        }
-        
-        public DeviceParams clearHasMagnet() {
-            this.hasMagnet_ = false;
-            this.bitField0_ &= 0xFFFFFFDF;
             return this;
         }
         
@@ -362,18 +307,9 @@ public interface CardboardDevice {
                     case 80: {
                         this.hasMagnet_ = input.readBool();
                         this.bitField0_ |= 0x20;
-                        continue;
                     }
                 }
             }
-        }
-        
-        public static DeviceParams parseFrom(byte[] data) throws InvalidProtocolBufferNanoException {
-            return (DeviceParams)MessageNano.mergeFrom((MessageNano)new DeviceParams(), data);
-        }
-        
-        public static DeviceParams parseFrom(CodedInputByteBufferNano input) throws IOException {
-            return new DeviceParams().mergeFrom(input);
         }
     }
 }

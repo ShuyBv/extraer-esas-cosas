@@ -1,7 +1,6 @@
 package com.upv.pm_2022.sep_dic.capitulo3_vrcardboard;
 
 import android.net.*;
-//import com.google.vrtoolkit.cardboard.proto.*;
 import android.util.*;
 import java.nio.*;
 import com.google.protobuf.nano.*;
@@ -184,7 +183,7 @@ public class CardboardDeviceParams{
         }
         return null;
     }
-    
+
     private byte[] toByteArray() {
         final CardboardDevice.DeviceParams params = new CardboardDevice.DeviceParams();
         params.setVendor(this.mVendor);
@@ -200,46 +199,12 @@ public class CardboardDeviceParams{
         return MessageNano.toByteArray((MessageNano)params);
     }
     
-    public Uri toUri() {
-        final byte[] paramsData = this.toByteArray();
-        final int paramsSize = paramsData.length;
-        return new Uri.Builder().scheme("http").authority("google.com").appendEncodedPath("cardboard/cfg").appendQueryParameter("p", Base64.encodeToString(paramsData, 0, paramsSize, 11)).build();
-    }
-    
-    public void setVendor(final String vendor) {
-        this.mVendor = ((vendor != null) ? vendor : "");
-    }
-    
-    public String getVendor() {
-        return this.mVendor;
-    }
-    
-    public void setModel(final String model) {
-        this.mModel = ((model != null) ? model : "");
-    }
-    
-    public String getModel() {
-        return this.mModel;
-    }
-    
-    public void setInterLensDistance(final float interLensDistance) {
-        this.mInterLensDistance = interLensDistance;
-    }
-    
     public float getInterLensDistance() {
         return this.mInterLensDistance;
     }
     
-    public void setVerticalDistanceToLensCenter(final float verticalDistanceToLensCenter) {
-        this.mVerticalDistanceToLensCenter = verticalDistanceToLensCenter;
-    }
-    
     public float getVerticalDistanceToLensCenter() {
         return this.mVerticalDistanceToLensCenter;
-    }
-    
-    public void setScreenToLensDistance(final float screenToLensDistance) {
-        this.mScreenToLensDistance = screenToLensDistance;
     }
     
     public float getScreenToLensDistance() {
@@ -252,14 +217,6 @@ public class CardboardDeviceParams{
     
     public FieldOfView getLeftEyeMaxFov() {
         return this.mLeftEyeMaxFov;
-    }
-    
-    public boolean getHasMagnet() {
-        return this.mHasMagnet;
-    }
-    
-    public void setHasMagnet(final boolean magnet) {
-        this.mHasMagnet = magnet;
     }
     
     @Override
@@ -275,19 +232,6 @@ public class CardboardDeviceParams{
         }
         final CardboardDeviceParams o = (CardboardDeviceParams)other;
         return this.mVendor.equals(o.mVendor) && this.mModel.equals(o.mModel) && this.mInterLensDistance == o.mInterLensDistance && this.mVerticalDistanceToLensCenter == o.mVerticalDistanceToLensCenter && this.mScreenToLensDistance == o.mScreenToLensDistance && this.mLeftEyeMaxFov.equals(o.mLeftEyeMaxFov) && this.mDistortion.equals(o.mDistortion) && this.mHasMagnet == o.mHasMagnet;
-    }
-    
-    @Override
-    public String toString() {
-        final StringBuilder append = new StringBuilder().append("{\n");
-        final String value = String.valueOf(String.valueOf(this.mVendor));
-        final StringBuilder append2 = append.append(new StringBuilder(12 + value.length()).append("  vendor: ").append(value).append(",\n").toString());
-        final String value2 = String.valueOf(String.valueOf(this.mModel));
-        final StringBuilder append3 = append2.append(new StringBuilder(11 + value2.length()).append("  model: ").append(value2).append(",\n").toString()).append(new StringBuilder(40).append("  inter_lens_distance: ").append(this.mInterLensDistance).append(",\n").toString()).append(new StringBuilder(53).append("  vertical_distance_to_lens_center: ").append(this.mVerticalDistanceToLensCenter).append(",\n").toString()).append(new StringBuilder(44).append("  screen_to_lens_distance: ").append(this.mScreenToLensDistance).append(",\n").toString());
-        final String value3 = String.valueOf(String.valueOf(this.mLeftEyeMaxFov.toString().replace("\n", "\n  ")));
-        final StringBuilder append4 = append3.append(new StringBuilder(22 + value3.length()).append("  left_eye_max_fov: ").append(value3).append(",\n").toString());
-        final String value4 = String.valueOf(String.valueOf(this.mDistortion.toString().replace("\n", "\n  ")));
-        return append4.append(new StringBuilder(16 + value4.length()).append("  distortion: ").append(value4).append(",\n").toString()).append(new StringBuilder(17).append("  magnet: ").append(this.mHasMagnet).append(",\n").toString()).append("}\n").toString();
     }
     
     private void setDefaultValues() {

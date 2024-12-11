@@ -1,9 +1,6 @@
 package com.upv.pm_2022.sep_dic.capitulo3_vrcardboard;
 
 public class So3Util {
-    private static final double M_SQRT1_2 = 0.7071067811865476;
-    private static final double ONE_6TH = 0.1666666716337204;
-    private static final double ONE_20TH = 0.1666666716337204;
     private static Vector3d temp31;
     private static Vector3d sO3FromTwoVecN;
     private static Vector3d sO3FromTwoVecA;
@@ -132,15 +129,6 @@ public class So3Util {
         b = kB * (w.y * w.z);
         result.set(1, 2, b - a);
         result.set(2, 1, b + a);
-    }
-    
-    public static void generatorField(final int i, final Matrix3x3d pos, final Matrix3x3d result) {
-        result.set(i, 0, 0.0);
-        result.set((i + 1) % 3,
-                   0,
-                   -pos.get((i + 2) % 3, 0));
-        result.set((i + 2) % 3,
-                   0, pos.get((i + 1) % 3,0));
     }
     
     static {

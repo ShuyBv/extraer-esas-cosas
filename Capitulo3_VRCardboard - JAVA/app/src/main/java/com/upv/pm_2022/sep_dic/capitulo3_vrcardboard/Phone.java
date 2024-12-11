@@ -4,90 +4,43 @@ import java.io.*;
 import com.google.protobuf.nano.*;
 
 public interface Phone {
-    public static final class PhoneParams extends MessageNano {
+    final class PhoneParams extends MessageNano {
         private static volatile PhoneParams[] _emptyArray;
         private int bitField0_;
         private float xPpi_;
         private float yPpi_;
         private float bottomBezelHeight_;
         public float[] gyroBias;
-        
-        public static PhoneParams[] emptyArray() {
-            if (PhoneParams._emptyArray == null) {
-                synchronized (InternalNano.LAZY_INIT_LOCK) {
-                    if (PhoneParams._emptyArray == null) {
-                        PhoneParams._emptyArray = new PhoneParams[0];
-                    }
-                }
-            }
-            return PhoneParams._emptyArray;
-        }
-        
+
         public float getXPpi() {
             return this.xPpi_;
         }
-        
-        public PhoneParams setXPpi(float value) {
-            this.xPpi_ = value;
-            this.bitField0_ |= 0x1;
-            return this;
-        }
-        
+
         public boolean hasXPpi() {
             return (this.bitField0_ & 0x1) != 0x0;
         }
-        
-        public PhoneParams clearXPpi() {
-            this.xPpi_ = 0.0f;
-            this.bitField0_ &= 0xFFFFFFFE;
-            return this;
-        }
-        
+
         public float getYPpi() {
             return this.yPpi_;
         }
-        
-        public PhoneParams setYPpi(float value) {
-            this.yPpi_ = value;
-            this.bitField0_ |= 0x2;
-            return this;
-        }
-        
+
         public boolean hasYPpi() {
             return (this.bitField0_ & 0x2) != 0x0;
         }
-        
-        public PhoneParams clearYPpi() {
-            this.yPpi_ = 0.0f;
-            this.bitField0_ &= 0xFFFFFFFD;
-            return this;
-        }
-        
+
         public float getBottomBezelHeight() {
             return this.bottomBezelHeight_;
         }
-        
-        public PhoneParams setBottomBezelHeight(float value) {
-            this.bottomBezelHeight_ = value;
-            this.bitField0_ |= 0x4;
-            return this;
-        }
-        
+
         public boolean hasBottomBezelHeight() {
             return (this.bitField0_ & 0x4) != 0x0;
         }
-        
-        public PhoneParams clearBottomBezelHeight() {
-            this.bottomBezelHeight_ = 0.0f;
-            this.bitField0_ &= 0xFFFFFFFB;
-            return this;
-        }
-        
+
         public PhoneParams() {
             super();
             this.clear();
         }
-        
+
         public PhoneParams clear() {
             this.bitField0_ = 0;
             this.xPpi_ = 0.0f;
@@ -97,7 +50,7 @@ public interface Phone {
             this.cachedSize = -1;
             return this;
         }
-        
+
         public void writeTo(CodedOutputByteBufferNano output) throws IOException {
             int dataSize;
             if ((this.bitField0_ & 0x1) != 0x0) {
@@ -119,7 +72,7 @@ public interface Phone {
             }
             super.writeTo(output);
         }
-        
+
         protected int computeSerializedSize() {
             int size;
             int dataSize;
@@ -140,7 +93,7 @@ public interface Phone {
             }
             return size;
         }
-        
+
         public PhoneParams mergeFrom(CodedInputByteBufferNano input) throws IOException {
             int tag;
             int arrayLength;
@@ -209,18 +162,9 @@ public interface Phone {
                         }
                         this.gyroBias = newArray2;
                         input.popLimit(limit);
-                        continue;
                     }
                 }
             }
-        }
-        
-        public static PhoneParams parseFrom(byte[] data) throws InvalidProtocolBufferNanoException {
-            return (PhoneParams)MessageNano.mergeFrom((MessageNano)new PhoneParams(), data);
-        }
-        
-        public static PhoneParams parseFrom(CodedInputByteBufferNano input) throws IOException {
-            return new PhoneParams().mergeFrom(input);
         }
     }
 }

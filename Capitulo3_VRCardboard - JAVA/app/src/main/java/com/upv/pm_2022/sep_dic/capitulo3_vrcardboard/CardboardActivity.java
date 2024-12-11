@@ -1,8 +1,5 @@
 package com.upv.pm_2022.sep_dic.capitulo3_vrcardboard;
 
-//import com.google.vrtoolkit.cardboard.sensors.MagnetSensor;
-//import com.google.vrtoolkit.cardboard.sensors.NfcSensor;
-
 import android.app.Activity;
 import android.nfc.NdefMessage;
 import android.os.Build;
@@ -40,21 +37,10 @@ public class CardboardActivity extends Activity {
         }
     }
     
-    public CardboardView getCardboardView() {
-        return mCardboardView;
-    }
-    
-    public NfcSensor getNfcSensor() {
-        return mNfcSensor;
-    }
-    
     public void setVolumeKeysMode(final int mode) {
         mVolumeKeysMode = mode;
     }
-    
-    public int getVolumeKeysMode() {
-        return mVolumeKeysMode;
-    }
+
     
     public boolean areVolumeKeysDisabled() {
         switch (mVolumeKeysMode) {

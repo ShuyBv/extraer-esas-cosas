@@ -1,7 +1,6 @@
 package com.upv.pm_2022.sep_dic.capitulo3_vrcardboard;
 
 public class Eye {
-    private final int mType;
     private final float[] mEyeView;
     private final Viewport mViewport;
     private final FieldOfView mFov;
@@ -12,15 +11,10 @@ public class Eye {
     
     public Eye(final int type) {
         super();
-        this.mType = type;
         this.mEyeView = new float[16];
         this.mViewport = new Viewport();
         this.mFov = new FieldOfView();
         this.mProjectionChanged = true;
-    }
-    
-    public int getType() {
-        return this.mType;
     }
     
     public float[] getEyeView() {
@@ -51,11 +45,5 @@ public class Eye {
     
     public void setProjectionChanged() {
         this.mProjectionChanged = true;
-    }
-    
-    public abstract static class Type {
-        public static final int MONOCULAR = 0;
-        public static final int LEFT = 1;
-        public static final int RIGHT = 2;
     }
 }

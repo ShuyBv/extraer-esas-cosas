@@ -10,11 +10,6 @@ import android.graphics.*;
 
 class UiLayer {
     private static final String TAG;
-    private static final int NORMAL_COLOR = -3355444;
-    private static final int PRESSED_COLOR = -12303292;
-    private static final float CENTER_LINE_THICKNESS_DP = 4.0f;
-    private static final int BUTTON_WIDTH_DP = 28;
-    private static final float TOUCH_SLOP_FACTOR = 1.5f;
     private final int mTouchWidthPx;
     private volatile Rect mTouchRect;
     private boolean mDownWithinBounds;
@@ -94,23 +89,9 @@ class UiLayer {
         }
         this.mGlStateBackup.writeToGL();
     }
-    
-    synchronized void setAlignmentMarkerEnabled(final boolean enabled) {
-        if (this.mAlignmentMarkerEnabled != enabled) {
-            this.mAlignmentMarkerEnabled = enabled;
-            this.mShouldUpdateViewport = true;
-        }
-    }
-    
+
     synchronized boolean getAlignmentMarkerEnabled() {
         return this.mAlignmentMarkerEnabled;
-    }
-    
-    synchronized void setSettingsButtonEnabled(final boolean enabled) {
-        if (this.mSettingsButtonEnabled != enabled) {
-            this.mSettingsButtonEnabled = enabled;
-            this.mShouldUpdateViewport = true;
-        }
     }
     
     synchronized boolean getSettingsButtonEnabled() {
@@ -171,8 +152,6 @@ class UiLayer {
     
     private static class ShaderProgram
     {
-        private static final String VERTEX_SHADER = "uniform mat4 uMVPMatrix;\nattribute vec2 aPosition;\nvoid main() {\n    gl_Position = uMVPMatrix * vec4(aPosition, 0.0, 1.0);\n}\n";
-        private static final String FRAGMENT_SHADER = "precision mediump float;\nuniform vec4 uColor;\nvoid main() {\n    gl_FragColor = uColor;\n}\n";
         public int program;
         public int aPosition;
         public int uMvpMatrix;
@@ -247,11 +226,6 @@ class UiLayer {
     
     private static class MeshRenderer
     {
-        private static final int BYTES_PER_FLOAT = 4;
-        private static final int BYTES_PER_SHORT = 4;
-        protected static final int COMPONENTS_PER_VERT = 2;
-        private static final int DATA_STRIDE_BYTES = 8;
-        private static final int DATA_POS_OFFSET = 0;
         protected int mArrayBufferId;
         protected int mElementBufferId;
         protected ShaderProgram mShader;
@@ -282,11 +256,11 @@ class UiLayer {
             GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, indexData.length * 4, (Buffer)indexBuffer, GLES20.GL_STATIC_DRAW);
             checkGlError("genAndBindBuffers");
         }
-        
+
         void updateViewport(final Viewport viewport) {
             Matrix.setIdentityM(this.mMvp, 0);
         }
-        
+
         void draw() {
             GLES20.glDisable(GLES20.GL_DEPTH_TEST);
             GLES20.glDisable(GLES20.GL_CULL_FACE);
@@ -343,13 +317,6 @@ class UiLayer {
     
     private static class SettingsButtonRenderer extends MeshRenderer
     {
-        private static final int DEGREES_PER_GEAR_SECTION = 60;
-        private static final int OUTER_RIM_END_DEG = 12;
-        private static final int INNER_RIM_BEGIN_DEG = 20;
-        private static final float OUTER_RADIUS = 1.0f;
-        private static final float MIDDLE_RADIUS = 0.75f;
-        private static final float INNER_RADIUS = 0.3125f;
-        private static final int NUM_VERTICES = 60;
         private int mButtonWidthPx;
         private int mColor;
         

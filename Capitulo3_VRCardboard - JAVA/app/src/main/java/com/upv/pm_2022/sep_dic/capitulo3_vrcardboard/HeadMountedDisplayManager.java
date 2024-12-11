@@ -44,15 +44,7 @@ public class HeadMountedDisplayManager {
         this.writeCardboardParamsToExternalStorage();
         return true;
     }
-    
-    public boolean updateScreenParams(final ScreenParams screenParams) {
-        if (screenParams == null || screenParams.equals(this.mHmd.getScreenParams())) {
-            return false;
-        }
-        this.mHmd.setScreenParams(screenParams);
-        return true;
-    }
-    
+
     private void writeCardboardParamsToExternalStorage() {
         boolean success = false;
         OutputStream stream = null;

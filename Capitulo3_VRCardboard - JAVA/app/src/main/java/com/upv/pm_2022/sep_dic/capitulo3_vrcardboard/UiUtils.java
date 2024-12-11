@@ -9,11 +9,6 @@ import android.os.*;
 import android.app.*;
 
 class UiUtils {
-    private static final String CARDBOARD_WEBSITE = "http://google.com/cardboard/cfg?vrtoolkit_version=0.5.1";
-    private static final String CARDBOARD_CONFIGURE_ACTION = "com.google.vrtoolkit.cardboard.CONFIGURE";
-    private static final String INTENT_EXTRAS_VERSION_KEY = "VERSION";
-    private static final String NO_BROWSER_TEXT = "No browser to open website.";
-    
     static void launchOrInstallCardboard(final Context context) {
         final PackageManager pm = context.getPackageManager();
         final Intent settingsIntent = new Intent();
@@ -47,7 +42,7 @@ class UiUtils {
                     context.startActivity(new Intent("android.intent.action.VIEW", Uri.parse("http://google.com/cardboard/cfg?vrtoolkit_version=0.5.1")));
                 }
                 catch (ActivityNotFoundException e) {
-                    Toast.makeText(context.getApplicationContext(), (CharSequence)"No browser to open website.", 1).show();
+                    Toast.makeText(context.getApplicationContext(), (CharSequence)"No browser to open website.", Toast.LENGTH_LONG).show();
                 }
             }
         };

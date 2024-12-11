@@ -94,17 +94,6 @@ public class DistortionRenderer {
         this.mGLStateBackupAberration = new GLStateBackup();
     }
     
-    public void setTextureFormat(final int textureFormat, final int textureType) {
-        if (this.mDrawingFrame) {
-            throw new IllegalStateException("Cannot change texture format during rendering.");
-        }
-        if (textureFormat != this.mTextureFormat || textureType != this.mTextureType) {
-            this.mTextureFormat = textureFormat;
-            this.mTextureType = textureType;
-            this.mTextureFormatChanged = true;
-        }
-    }
-    
     public void beforeDrawFrame() {
         this.mDrawingFrame = true;
         if (this.mFovsChanged || this.mTextureFormatChanged) {
@@ -292,11 +281,7 @@ public class DistortionRenderer {
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, mesh.mElementBufferId);
         GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, mesh.nIndices, GLES20.GL_UNSIGNED_SHORT, 0);
     }
-    
-    private float computeDistortionScale(final Distortion distortion, final float screenWidthM, final float interpupillaryDistanceM) {
-        return distortion.distortionFactor((screenWidthM / 2.0f - interpupillaryDistanceM / 2.0f) / (screenWidthM / 4.0f));
-    }
-    
+
     private int createTexture(final int width, final int height, final int textureFormat, final int textureType) {
         final int[] textureIds = { 0 };
         GLES20.glGenTextures(1, textureIds, 0);
@@ -462,9 +447,9 @@ public class DistortionRenderer {
         final int error;
         if ((error = GLES20.glGetError()) != 0) {
             final String s = "DistortionRenderer";
-            final String value = String.valueOf(String.valueOf(op));
+            final String value = (String.valueOf(op));
             Log.e(s, new StringBuilder(21 + value.length()).append(value).append(": glError ").append(error).toString());
-            final String value2 = String.valueOf(String.valueOf(op));
+            final String value2 = (String.valueOf(op));
             throw new RuntimeException(new StringBuilder(21 + value2.length()).append(value2).append(": glError ").append(error).toString());
         }
     }
@@ -509,15 +494,6 @@ public class DistortionRenderer {
         public static final int BYTES_PER_FLOAT = 4;
         public static final int BYTES_PER_SHORT = 2;
         public static final int COMPONENTS_PER_VERT = 9;
-        public static final int DATA_STRIDE_BYTES = 36;
-        public static final int DATA_POS_OFFSET = 0;
-        public static final int DATA_POS_COMPONENTS = 2;
-        public static final int DATA_VIGNETTE_OFFSET = 2;
-        public static final int DATA_VIGNETTE_COMPONENTS = 1;
-        public static final int DATA_RUV_OFFSET = 3;
-        public static final int DATA_GUV_OFFSET = 5;
-        public static final int DATA_BUV_OFFSET = 7;
-        public static final int DATA_UV_COMPONENTS = 2;
         public static final int ROWS = 40;
         public static final int COLS = 40;
         public static final float VIGNETTE_SIZE_TAN_ANGLE = 0.05f;

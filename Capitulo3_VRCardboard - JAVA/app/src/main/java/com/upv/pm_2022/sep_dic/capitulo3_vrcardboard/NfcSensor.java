@@ -8,13 +8,9 @@ import android.nfc.*;
 import android.nfc.tech.*;
 import android.util.*;
 import android.app.*;
-//import com.google.vrtoolkit.cardboard.*;
 import java.util.*;
 
 public class NfcSensor {
-    private static final String TAG = "NfcSensor";
-    private static final int MAX_CONNECTION_FAILURES = 1;
-    private static final long NFC_POLLING_INTERVAL_MS = 250L;
     private static NfcSensor sInstance;
     private final Context mContext;
     private final NfcAdapter mNfcAdapter;
@@ -100,93 +96,7 @@ public class NfcSensor {
             return (this.mCurrentNdef != null) ? this.mCurrentNdef.getCachedNdefMessage() : null;
         }
     }
-    
-    public NdefMessage getCurrentTagContents() throws TagLostException, IOException, FormatException {
-        synchronized (this.mTagLock) {
-            return (this.mCurrentNdef != null) ? this.mCurrentNdef.getNdefMessage() : null;
-        }
-    }
-    
-    public int getTagCapacity() {
-        synchronized (this.mTagLock) {
-            if (this.mCurrentNdef == null) {
-                throw new IllegalStateException("No NFC tag");
-            }
-            return this.mCurrentNdef.getMaxSize();
-        }
-    }
-    
-    public void writeUri(final Uri uri) throws TagLostException, IOException, IllegalArgumentException {
-        synchronized (this.mTagLock) {
-            if (this.mCurrentTag == null) {
-                throw new IllegalStateException("No NFC tag found");
-            }
-            NdefMessage currentMessage = null;
-            NdefMessage newMessage = null;
-            final NdefRecord newRecord = NdefRecord.createUri(uri);
-            try {
-                currentMessage = this.getCurrentTagContents();
-            }
-            catch (Exception e3) {
-                currentMessage = this.getTagContents();
-            }
-            if (currentMessage != null) {
-                final ArrayList<NdefRecord> newRecords = new ArrayList<NdefRecord>();
-                boolean recordFound = false;
-                for (final NdefRecord record : currentMessage.getRecords()) {
-                    if (this.isCardboardNdefRecord(record)) {
-                        if (!recordFound) {
-                            newRecords.add(newRecord);
-                            recordFound = true;
-                        }
-                    }
-                    else {
-                        newRecords.add(record);
-                    }
-                }
-                newMessage = new NdefMessage((NdefRecord[])newRecords.toArray(new NdefRecord[newRecords.size()]));
-            }
-            if (newMessage == null) {
-                newMessage = new NdefMessage(new NdefRecord[] { newRecord });
-            }
-            Label_0432: {
-                if (this.mCurrentNdef != null) {
-                    if (!this.mCurrentNdef.isConnected()) {
-                        this.mCurrentNdef.connect();
-                    }
-                    if (this.mCurrentNdef.getMaxSize() < newMessage.getByteArrayLength()) {
-                        throw new IllegalArgumentException(new StringBuilder(82).append("Not enough capacity in NFC tag. Capacity: ").append(this.mCurrentNdef.getMaxSize()).append(" bytes, ").append(newMessage.getByteArrayLength()).append(" required.").toString());
-                    }
-                    try {
-                        this.mCurrentNdef.writeNdefMessage(newMessage);
-                        break Label_0432;
-                    }
-                    catch (FormatException e) {
-                        final String s = "Internal error when writing to NFC tag: ";
-                        final String value = String.valueOf(e.toString());
-                        throw new RuntimeException((value.length() != 0) ? s.concat(value) : new String(s));
-                    }
-                }
-                final NdefFormatable ndef = NdefFormatable.get(this.mCurrentTag);
-                if (ndef == null) {
-                    throw new IOException("Could not find a writable technology for the NFC tag");
-                }
-                Log.w("NfcSensor", "Ndef technology not available. Falling back to NdefFormattable.");
-                try {
-                    ndef.connect();
-                    ndef.format(newMessage);
-                    ndef.close();
-                }
-                catch (FormatException e2) {
-                    final String s2 = "Internal error when writing to NFC tag: ";
-                    final String value2 = String.valueOf(e2.toString());
-                    throw new RuntimeException((value2.length() != 0) ? s2.concat(value2) : new String(s2));
-                }
-            }
-            this.onNewNfcTag(this.mCurrentTag);
-        }
-    }
-    
+
     public void onResume(final Activity activity) {
         if (!this.isNfcEnabled()) {
             return;

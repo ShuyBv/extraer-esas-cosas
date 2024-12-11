@@ -23,16 +23,6 @@ public class Viewport {
         GLES20.glScissor(this.x, this.y, this.width, this.height);
     }
     
-    public void getAsArray(final int[] array, final int offset) {
-        if (offset + 4 > array.length) {
-            throw new IllegalArgumentException("Not enough space to write the result");
-        }
-        array[offset] = this.x;
-        array[offset + 1] = this.y;
-        array[offset + 2] = this.width;
-        array[offset + 3] = this.height;
-    }
-    
     @Override
     public String toString() {
         return "{\n" + new StringBuilder(18).append("  x: ").append(this.x).append(",\n").toString() + new StringBuilder(18).append("  y: ").append(this.y).append(",\n").toString() + new StringBuilder(22).append("  width: ").append(this.width).append(",\n").toString() + new StringBuilder(23).append("  height: ").append(this.height).append(",\n").toString() + "}";

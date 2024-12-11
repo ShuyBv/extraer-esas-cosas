@@ -10,8 +10,6 @@ import java.io.InputStream;
 
 public abstract class ConfigUtils {
     public static final String CARDBOARD_CONFIG_FOLDER = "Cardboard";
-    public static final String CARDBOARD_DEVICE_PARAMS_FILE = "current_device_params";
-    public static final String CARDBOARD_PHONE_PARAMS_FILE = "phone_params";
     
     public static File getConfigFile(final String filename) {
         final File configFolder = new File(

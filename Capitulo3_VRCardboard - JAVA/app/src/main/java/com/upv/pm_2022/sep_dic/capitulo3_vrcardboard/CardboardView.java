@@ -1,6 +1,5 @@
 package com.upv.pm_2022.sep_dic.capitulo3_vrcardboard;
 
-//import com.google.vrtoolkit.cardboard.sensors.*;
 import java.util.concurrent.*;
 import android.content.*;
 //import com.google.vrtoolkit.cardboard.proto.*;
@@ -35,7 +34,7 @@ public class CardboardView extends GLSurfaceView {
         this.mVignetteEnabled = true;
         this.init(context);
     }
-    
+
     public CardboardView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
         this.mVRMode = true;
@@ -46,7 +45,7 @@ public class CardboardView extends GLSurfaceView {
         this.mVignetteEnabled = true;
         this.init(context);
     }
-    
+
     public void setRenderer(final Renderer renderer) {
         if (renderer == null) {
             return;
@@ -55,75 +54,15 @@ public class CardboardView extends GLSurfaceView {
         super.setRenderer((GLSurfaceView.Renderer)this.mRendererHelper);
         this.mRendererSet = true;
     }
-    
+
     public void setRenderer(final StereoRenderer renderer) {
         this.setRenderer((renderer != null) ? new StereoRendererHelper(renderer) : ((Renderer)null));
     }
-    
-    public void getCurrentEyeParams(final HeadTransform head, final Eye leftEye, final Eye rightEye, final Eye monocular) {
-        this.mRendererHelper.getCurrentEyeParams(head, leftEye, rightEye, monocular);
-    }
-    
-    public void setVRModeEnabled(final boolean enabled) {
-        this.mVRMode = enabled;
-        this.mRendererHelper.setVRModeEnabled(enabled);
-    }
-    
-    public boolean getVRMode() {
-        return this.mVRMode;
-    }
-    
-    public void setAlignmentMarkerEnabled(final boolean enabled) {
-        this.mUiLayer.setAlignmentMarkerEnabled(enabled);
-    }
-    
-    public boolean getAlignmentMarkerEnabled() {
-        return this.mUiLayer.getAlignmentMarkerEnabled();
-    }
-    
-    public void setSettingsButtonEnabled(final boolean enabled) {
-        this.mUiLayer.setSettingsButtonEnabled(enabled);
-    }
-    
-    public boolean getSettingsButtonEnabled() {
-        return this.mUiLayer.getSettingsButtonEnabled();
-    }
-    
+
     public HeadMountedDisplay getHeadMountedDisplay() {
         return this.mHmdManager.getHeadMountedDisplay();
     }
-    
-    public void setRestoreGLStateEnabled(final boolean enabled) {
-        this.mRestoreGLStateEnabled = enabled;
-        this.mRendererHelper.setRestoreGLStateEnabled(enabled);
-    }
-    
-    public boolean getRestoreGLStateEnabled() {
-        return this.mRestoreGLStateEnabled;
-    }
-    
-    public void setChromaticAberrationCorrectionEnabled(final boolean enabled) {
-        this.mChromaticAberrationCorrectionEnabled = enabled;
-        this.mRendererHelper.setChromaticAberrationCorrectionEnabled(enabled);
-    }
-    
-    public boolean getChromaticAberrationCorrectionEnabled() {
-        return this.mChromaticAberrationCorrectionEnabled;
-    }
-    
-    public void setVignetteEnabled(final boolean enabled) {
-        this.mVignetteEnabled = enabled;
-        this.mRendererHelper.setVignetteEnabled(enabled);
-    }
-    
-    public boolean getVignetteEnabled() {
-        return this.mVignetteEnabled;
-    }
-    
-    public void setNeckModelEnabled(final boolean enabled) {
-        this.mHeadTracker.setNeckModelEnabled(enabled);
-    }
-    
+
     public void updateCardboardDeviceParams(final CardboardDeviceParams cardboardDeviceParams) {
         if (this.mHmdManager.updateCardboardDeviceParams(cardboardDeviceParams)) {
             this.mRendererHelper.setCardboardDeviceParams(this.getCardboardDeviceParams());
@@ -132,45 +71,6 @@ public class CardboardView extends GLSurfaceView {
     
     public CardboardDeviceParams getCardboardDeviceParams() {
         return this.mHmdManager.getHeadMountedDisplay().getCardboardDeviceParams();
-    }
-    /*
-    public void updateScreenParams(final ScreenParams screenParams) {
-        if (this.mHmdManager.updateScreenParams(screenParams)) {
-            this.mRendererHelper.setScreenParams(this.getScreenParams());
-        }
-    }*/
-    
-    public ScreenParams getScreenParams() {
-        return this.mHmdManager.getHeadMountedDisplay().getScreenParams();
-    }
-    
-    public float getInterpupillaryDistance() {
-        return this.getCardboardDeviceParams().getInterLensDistance();
-    }
-    
-    public void setDistortionCorrectionEnabled(final boolean enabled) {
-        this.mDistortionCorrectionEnabled = enabled;
-        this.mRendererHelper.setDistortionCorrectionEnabled(enabled);
-    }
-    
-    public boolean getDistortionCorrectionEnabled() {
-        return this.mDistortionCorrectionEnabled;
-    }
-    
-    public void setDistortionCorrectionTextureFormat(final int textureFormat, final int textureType) {
-        this.mRendererHelper.setDistortionCorrectionTextureFormat(textureFormat, textureType);
-    }
-    
-    public void undistortTexture(final int inputTexture) {
-        this.mRendererHelper.undistortTexture(inputTexture);
-    }
-    
-    public void renderUiLayer() {
-        this.mRendererHelper.renderUiLayer();
-    }
-    
-    public void setDistortionCorrectionScale(final float scale) {
-        this.mRendererHelper.setDistortionCorrectionScale(scale);
     }
     
     public void onResume() {
@@ -297,129 +197,6 @@ public class CardboardView extends GLSurfaceView {
                     RendererHelper.this.mProjectionChanged = true;
                 }
             });
-        }
-        
-        public void setScreenParams(final ScreenParams newParams) {
-            final ScreenParams screenParams = new ScreenParams(newParams);
-            CardboardView.this.queueEvent(new Runnable() {
-                @Override
-                public void run() {
-                    RendererHelper.this.mHmd.setScreenParams(screenParams);
-                    RendererHelper.this.mProjectionChanged = true;
-                }
-            });
-        }
-        
-        public void setDistortionCorrectionEnabled(final boolean enabled) {
-            CardboardView.this.queueEvent(new Runnable() {
-                @Override
-                public void run() {
-                    RendererHelper.this.mDistortionCorrectionEnabled = enabled;
-                    RendererHelper.this.mProjectionChanged = true;
-                }
-            });
-        }
-        
-        public void setDistortionCorrectionScale(final float scale) {
-            CardboardView.this.queueEvent(new Runnable() {
-                @Override
-                public void run() {
-                    RendererHelper.this.mDistortionRenderer.setResolutionScale(scale);
-                }
-            });
-        }
-        
-        public void setVRModeEnabled(final boolean enabled) {
-            CardboardView.this.queueEvent(new Runnable() {
-                @Override
-                public void run() {
-                    if (RendererHelper.this.mVRMode == enabled) {
-                        return;
-                    }
-                    RendererHelper.this.mVRMode = enabled;
-                    if (RendererHelper.this.mRenderer instanceof StereoRendererHelper) {
-                        final StereoRendererHelper stereoHelper = (StereoRendererHelper)RendererHelper.this.mRenderer;
-                        stereoHelper.setVRModeEnabled(enabled);
-                    }
-                    RendererHelper.this.mProjectionChanged = true;
-                    RendererHelper.this.onSurfaceChanged(null, RendererHelper.this.mHmd.getScreenParams().getWidth(), RendererHelper.this.mHmd.getScreenParams().getHeight());
-                }
-            });
-        }
-        
-        public void setRestoreGLStateEnabled(final boolean enabled) {
-            CardboardView.this.queueEvent(new Runnable() {
-                @Override
-                public void run() {
-                    RendererHelper.this.mDistortionRenderer.setRestoreGLStateEnabled(enabled);
-                }
-            });
-        }
-        
-        public void setChromaticAberrationCorrectionEnabled(final boolean enabled) {
-            CardboardView.this.queueEvent(new Runnable() {
-                @Override
-                public void run() {
-                    RendererHelper.this.mDistortionRenderer.setChromaticAberrationCorrectionEnabled(enabled);
-                }
-            });
-        }
-        
-        public void setVignetteEnabled(final boolean enabled) {
-            CardboardView.this.queueEvent(new Runnable() {
-                @Override
-                public void run() {
-                    RendererHelper.this.mDistortionRenderer.setVignetteEnabled(enabled);
-                    RendererHelper.this.mProjectionChanged = true;
-                }
-            });
-        }
-        
-        public void setDistortionCorrectionTextureFormat(final int textureFormat, final int textureType) {
-            CardboardView.this.queueEvent(new Runnable() {
-                @Override
-                public void run() {
-                    RendererHelper.this.mDistortionRenderer.setTextureFormat(textureFormat, textureType);
-                }
-            });
-        }
-        
-        public void undistortTexture(final int inputTexture) {
-            CardboardView.this.queueEvent(new Runnable() {
-                @Override
-                public void run() {
-                    RendererHelper.this.mDistortionRenderer.undistortTexture(inputTexture);
-                }
-            });
-        }
-        
-        public void renderUiLayer() {
-            CardboardView.this.queueEvent(new Runnable() {
-                @Override
-                public void run() {
-                    CardboardView.this.mUiLayer.draw();
-                }
-            });
-        }
-        
-        public void getCurrentEyeParams(final HeadTransform head, final Eye leftEye, final Eye rightEye, final Eye monocular) {
-            final CountDownLatch finished = new CountDownLatch(1);
-            CardboardView.this.queueEvent(new Runnable() {
-                @Override
-                public void run() {
-                    RendererHelper.this.getFrameParams(head, leftEye, rightEye, monocular);
-                    finished.countDown();
-                }
-            });
-            try {
-                finished.await();
-            }
-            catch (InterruptedException e) {
-                final String s = "CardboardView";
-                final String s2 = "Interrupted while reading frame params: ";
-                final String value = String.valueOf(e.toString());
-                Log.e(s, (value.length() != 0) ? s2.concat(value) : new String(s2));
-            }
         }
         
         private void getFrameParams(final HeadTransform head, final Eye leftEye, final Eye rightEye, final Eye monocular) {

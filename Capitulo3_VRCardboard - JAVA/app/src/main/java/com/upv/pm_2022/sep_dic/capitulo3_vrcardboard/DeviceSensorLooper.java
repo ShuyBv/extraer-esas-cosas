@@ -40,6 +40,7 @@ public class DeviceSensorLooper implements SensorEventProvider {
                 }
             }
         };
+
         final HandlerThread sensorThread = new HandlerThread("sensor") {
             protected void onLooperPrepared() {
                 final Handler handler = new Handler(Looper.myLooper());

@@ -1,6 +1,5 @@
 package com.upv.pm_2022.sep_dic.capitulo3_vrcardboard;
 
-//import com.google.vrtoolkit.cardboard.proto.*;
 import java.nio.*;
 import android.util.*;
 import com.google.protobuf.nano.*;
@@ -9,7 +8,7 @@ import java.io.*;
 public class PhoneParams {
     private static final String TAG;
     private static final int STREAM_SENTINEL = 779508118;
-    
+
     static Phone.PhoneParams readFromInputStream(final InputStream inputStream) {
         if (inputStream == null) {
             return null;
@@ -36,18 +35,18 @@ public class PhoneParams {
         catch (InvalidProtocolBufferNanoException e) {
             final String tag = PhoneParams.TAG;
             final String s = "Error parsing protocol buffer: ";
-            final String value = String.valueOf(e.toString());
+            final String value = (e.toString());
             Log.w(tag, (value.length() != 0) ? s.concat(value) : new String(s));
         }
         catch (IOException e2) {
             final String tag2 = PhoneParams.TAG;
             final String s2 = "Error reading Cardboard parameters: ";
-            final String value2 = String.valueOf(e2.toString());
+            final String value2 = (e2.toString());
             Log.w(tag2, (value2.length() != 0) ? s2.concat(value2) : new String(s2));
         }
         return null;
     }
-    
+
     static Phone.PhoneParams readFromExternalStorage() {
         try {
             InputStream stream = null;
@@ -66,7 +65,7 @@ public class PhoneParams {
         }
         catch (FileNotFoundException e) {
             final String tag = PhoneParams.TAG;
-            final String value = String.valueOf(String.valueOf(e));
+            final String value = (String.valueOf(e));
             Log.d(tag, new StringBuilder(43 + value.length()).append("Cardboard phone parameters file not found: ").append(value).toString());
             return null;
         }

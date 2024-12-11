@@ -7,33 +7,7 @@ public class Matrix3x3d {
         super();
         this.m = new double[9];
     }
-    
-    public Matrix3x3d(final double m00, final double m01, final double m02, final double m10, final double m11, final double m12, final double m20, final double m21, final double m22) {
-        super();
-        (this.m = new double[9])[0] = m00;
-        this.m[1] = m01;
-        this.m[2] = m02;
-        this.m[3] = m10;
-        this.m[4] = m11;
-        this.m[5] = m12;
-        this.m[6] = m20;
-        this.m[7] = m21;
-        this.m[8] = m22;
-    }
-    
-    public Matrix3x3d(final Matrix3x3d o) {
-        super();
-        (this.m = new double[9])[0] = o.m[0];
-        this.m[1] = o.m[1];
-        this.m[2] = o.m[2];
-        this.m[3] = o.m[3];
-        this.m[4] = o.m[4];
-        this.m[5] = o.m[5];
-        this.m[6] = o.m[6];
-        this.m[7] = o.m[7];
-        this.m[8] = o.m[8];
-    }
-    
+
     public void set(final double m00, final double m01, final double m02, final double m10, final double m11, final double m12, final double m20, final double m21, final double m22) {
         this.m[0] = m00;
         this.m[1] = m01;
@@ -95,13 +69,7 @@ public class Matrix3x3d {
     public void set(final int row, final int col, final double value) {
         this.m[3 * row + col] = value;
     }
-    
-    public void getColumn(final int col, final Vector3d v) {
-        v.x = this.m[col];
-        v.y = this.m[col + 3];
-        v.z = this.m[col + 6];
-    }
-    
+
     public void setColumn(final int col, final Vector3d v) {
         this.m[col] = v.x;
         this.m[col + 3] = v.y;
